@@ -12,17 +12,17 @@ type State = {
 };
 
 type Actions = {
-    set_epsilon: (ep: number) => void,
-    start_drawing: (e: PointerEvent) => void,
-    stop_drawing: (e: PointerEvent) => void,
-    move_drawing: (e: PointerEvent) => void,
+    set_epsilon(ep: number): void;
+    start_drawing(e: PointerEvent): void;
+    stop_drawing(e: PointerEvent): void;
+    move_drawing(e: PointerEvent): void;
 };
 
 type Getters = {
     d: () => string
 };
 
-export const useStrokeStore = defineStore<'stroke', State, Actions, Getters>('stroke', {
+export const useStrokeStore = defineStore<'stroke', State, Getters, Actions>('stroke', {
     state() {
         return {
             drawing: false,

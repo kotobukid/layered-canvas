@@ -2,8 +2,8 @@
 import {onMounted, ref, inject, type Ref} from "vue";
 import type {BrushColor, Point2D} from "../types.ts";
 
-const canvas = ref(null);
-let ctx: CanvasRenderingContext2D = null;
+const canvas = ref<HTMLCanvasElement | null>(null);
+let ctx: CanvasRenderingContext2D | null = null;
 
 const brushColor = inject('brush-color') as Ref<BrushColor>;
 const canvasSize = inject('canvas-size') as Point2D;
@@ -15,14 +15,14 @@ let lastPoint: Point2D = {
 };
 
 const update_brush = () => {
-  ctx.fillStyle = brushColor.value.stroke;
-  ctx.strokeStyle = brushColor.value.stroke;
-  ctx.lineWidth = brushColor.value.strokeWidth;
-  ctx.lineCap = 'round';
+  ctx!.fillStyle = brushColor.value.stroke;
+  ctx!.strokeStyle = brushColor.value.stroke;
+  ctx!.lineWidth = brushColor.value.strokeWidth;
+  ctx!.lineCap = 'round';
 };
 
 onMounted(() => {
-  ctx = canvas.value.getContext("2d");
+  ctx = canvas!.value!.getContext!("2d");
 
   update_brush();
 });
@@ -37,9 +37,9 @@ const start_painting = (e: PointerEvent) => {
 
   update_brush();
 
-  ctx.beginPath();
-  ctx.arc(e.offsetX, e.offsetY, brushColor.value.strokeWidth / 2, 0, 2 * Math.PI);
-  ctx.fill();
+  ctx!.beginPath();
+  ctx!.arc(e.offsetX, e.offsetY, brushColor.value.strokeWidth / 2, 0, 2 * Math.PI);
+  ctx!.fill();
 };
 
 const stop_painting = () => {
@@ -53,11 +53,11 @@ const paint_move = (e: PointerEvent) => {
       y: e.offsetY
     };
 
-    ctx.beginPath();
-    ctx.moveTo(lastPoint.x, lastPoint.y);
-    ctx.lineTo(nextPoint.x, nextPoint.y);
+    ctx!.beginPath();
+    ctx!.moveTo(lastPoint.x, lastPoint.y);
+    ctx!.lineTo(nextPoint.x, nextPoint.y);
 
-    ctx.stroke();
+    ctx!.stroke();
 
     lastPoint = {...nextPoint};
   }

@@ -32,6 +32,6 @@ provide('canvas-size', canvasSize);
 
 <style scoped>
 .container {
-    position: relative;
+  position: relative;
 }
 </style>
