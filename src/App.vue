@@ -11,7 +11,11 @@ const brushColor: Ref<BrushColor> = ref({
   strokeWidth: 5
 });
 
+
 provide('brush-color', brushColor);
+
+const epsilon = ref(1.5);
+provide('epsilon', epsilon);
 
 const canvasSize: Point2D = {
   x: 1000,

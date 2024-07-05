@@ -16,13 +16,21 @@ const width_changed = (e: Event) => {
   const width = e.target.value;
   brushColor.value.strokeWidth = Number(width);
 };
+
+const epsilon = inject('epsilon') as Ref<number>;
+
+const ep_changed = (e: Event) => {
+  console.log(e.target?.value);
+  epsilon.value = Number(e.target?.value);
+};
 </script>
 
 <template lang="pug">
   .color_option
     label.content
       span.name Width
-      input.width(type="number"
+      input.width(
+        type="number"
         :value="brushColor.strokeWidth"
         @change="width_changed"
       )
@@ -32,6 +40,10 @@ const width_changed = (e: Event) => {
     label.content
       span.name Fill
       span.fill.preview(:style="fill")
+    label.content
+      span.name 間引き
+      input(type="range" :value="epsilon" @change="ep_changed" step="0.05" min="0.1" max="10")
+      span {{ epsilon }}
 
 </template>
 
@@ -51,9 +63,13 @@ span.name {
   margin-right: 5px;
 }
 
-input.width {
+input[type="number"].width {
   width: 3rem;
   text-align: right;
+}
+
+input[type="range"] {
+  width: 200px;
 }
 
 .preview {
