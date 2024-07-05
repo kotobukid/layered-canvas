@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {computed, inject, ref, type Ref} from "vue";
 import type {Point2D} from "../types.ts";
+import {useInterpolation} from "../composables/interpolation.ts";
+
+const {douglasPeucker} = useInterpolation();
 
 const canvasSize = inject('canvas-size') as Point2D;
 
@@ -24,7 +27,8 @@ const stop_drawing = (e: PointerEvent) => {
       x: e.offsetX,
       y: e.offsetY
     });
-    points_to_draw.value = [...points];
+    points_to_draw.value = douglasPeucker(points, 0, points.length, 1.6);
+    // points_to_draw.value = [...points];
   }
 };
 
