@@ -1,18 +1,9 @@
 <script setup lang="ts">
-import {computed, inject, type Ref} from "vue";
+import {computed, inject} from "vue";
 import type {Point2D} from "../types.ts";
-import {useStroke} from "../composables/stroke.ts";
+import {useStrokeStore} from "../stores/stroke.ts";
 
-const epsilon = inject('epsilon') as Ref<number>;
-
-const {
-  d,
-  start_drawing,
-  stop_drawing,
-  move_drawing,
-  points_raw,
-  points_reduced
-} = useStroke(epsilon);
+const strokeStore = useStrokeStore();
 
 const canvasSize = inject('canvas-size') as Point2D;
 
@@ -24,15 +15,15 @@ const viewBox = computed(() => {
 <template lang="pug">
   svg.operation(
     :width="canvasSize.x" :height="canvasSize.y" :viewBox="viewBox"
-    @pointerdown="start_drawing"
-    @pointerup="stop_drawing"
-    @pointerleave="stop_drawing"
-    @pointermove="move_drawing"
+    @pointerdown="strokeStore.start_drawing"
+    @pointerup="strokeStore.stop_drawing"
+    @pointerleave="strokeStore.stop_drawing"
+    @pointermove="strokeStore.move_drawing"
   )
-    g.no_events.preview(v-if="points_raw.length > 1")
+    g.no_events.preview(v-if="strokeStore.points_raw.length > 1")
       g.circles
-        circle(v-for="p in points_reduced" :cx="p.x" :cy="p.y" r="2" fill="white" stroke="red" stroke-width="1")
-      path(:d="d" stroke-width="1" stroke="blue" fill="transparent")
+        circle(v-for="p in strokeStore.points_reduced" :cx="p.x" :cy="p.y" r="2" fill="white" stroke="red" stroke-width="1")
+      path(:d="strokeStore.d" stroke-width="1" stroke="blue" fill="transparent")
 </template>
 
 <style scoped lang="less">

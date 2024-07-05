@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed, inject, type Ref} from "vue";
 import type {BrushColor} from "../types.ts";
+import {useStrokeStore} from "../stores/stroke.ts";
 
 const brushColor = inject('brush-color') as Ref<BrushColor>;
 
@@ -12,15 +13,14 @@ const fill = computed(() => {
   return `background-color: ${brushColor.value.fill};`;
 });
 
-const width_changed = (e: Event) => {
-  const width = e.target.value;
-  brushColor.value.strokeWidth = Number(width);
+const width_changed = (e: InputEvent) => {
+  brushColor.value.strokeWidth = Number((<HTMLInputElement>e.target).value);
 };
 
-const epsilon = inject('epsilon') as Ref<number>;
+const strokeStore = useStrokeStore();
 
-const ep_changed = (e: Event) => {
-  epsilon.value = Number(e.target?.value);
+const ep_changed = (e: InputEvent) => {
+  strokeStore.set_epsilon(Number((<HTMLInputElement>e.target).value));
 };
 </script>
 
@@ -41,8 +41,8 @@ const ep_changed = (e: Event) => {
       span.fill.preview(:style="fill")
     label.content
       span.name 間引き
-      input(type="range" :value="epsilon" @input="ep_changed" step="0.05" min="0.1" max="10")
-      span {{ epsilon.toFixed(2) }}
+      input(type="range" :value="strokeStore.epsilon" @input="ep_changed" step="0.05" min="0.1" max="10")
+      span {{ strokeStore.epsilon.toFixed(2) }}
 
 </template>
 

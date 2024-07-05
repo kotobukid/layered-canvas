@@ -22,16 +22,21 @@ function douglasPeucker(pointList, start, end, epsilon) {
 
     // If max distance is greater than epsilon, recursively simplify
     if (dmax > epsilon) {
-        // Recursive call.
+        // Recursive call
         const recResults1 = douglasPeucker(pointList, start, index + 1, epsilon)
         const recResults2 = douglasPeucker(pointList, index, end, epsilon)
 
-        // Build the result list.
+        // Build the result list
         for (let i = 1; i < recResults2.length; ++i)
             recResults1.push(recResults2[i])
-        return recResults1
+
+        // Check the validity of the result and return
+        return recResults1.every(point => point !== undefined) ? recResults1 : []
     } else {
-        return [pointList[start], pointList[end - 1]]
+        const results = [pointList[start], pointList[end - 1]]
+
+        // Check the validity of the result and return
+        return results.every(point => point !== undefined) ? results : []
     }
 }
 
