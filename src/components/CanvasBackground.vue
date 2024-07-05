@@ -6,6 +6,7 @@ const canvas = ref(null);
 let ctx: CanvasRenderingContext2D = null;
 
 const brushColor = inject('brush-color') as Ref<BrushColor>;
+const canvasSize = inject('canvas-size') as Point2D;
 
 let painting = false;
 let lastPoint: Point2D = {
@@ -65,7 +66,7 @@ const paint_move = (e: PointerEvent) => {
 
 <template lang="pug">
   canvas.background(
-    ref="canvas" width="1000" height="600"
+    ref="canvas" :width="canvasSize.x" :height="canvasSize.y"
     @pointerdown="start_painting"
     @pointerleave="stop_painting"
     @pointerup="stop_painting"
@@ -73,8 +74,12 @@ const paint_move = (e: PointerEvent) => {
   )
 </template>
 
-<style scoped>
+<style scoped lang="less">
+@import "../styles/funcs.less";
+
 canvas.background {
   outline: 1px solid grey;
+
+  .canvas_svg();
 }
 </style>
