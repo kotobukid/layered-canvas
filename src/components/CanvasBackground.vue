@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, inject, type Ref} from "vue";
+import type {BrushColor} from "../types.ts";
 
 const canvas = ref(null);
+const brushColor = inject('brush-color') as Ref<BrushColor>;
 
 onMounted(() => {
   const ctx: CanvasRenderingContext2D = canvas.value.getContext("2d");
 
-  ctx.fillStyle = 'red';
-  ctx.strokeStyle = 'pink';
+  ctx.fillStyle = brushColor.value.fill;
+  ctx.strokeStyle = brushColor.value.stroke;
+  ctx.lineWidth = brushColor.value.strokeWidth;
 
   ctx.fillRect(25, 25, 100, 100);
   ctx.clearRect(45, 45, 60, 60);
